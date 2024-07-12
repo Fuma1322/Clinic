@@ -10,7 +10,8 @@ import { X } from "lucide-react";
 import generateSlug from "@/utils/generateSlug";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Speciality } from "@prisma/client";
+import { createManySpecialities, createSpeciality } from "@/actions/specialities";
+
 
 export type SpecialityProps = {
   title: string;
@@ -44,14 +45,14 @@ export default function SpecialityForm({
     data.slug=slug;
     console.log(data);
     if (edititingId){
-      await UpdateSpeciality(edititingId, data);
+      await UpdatedSpeciality(edititingId, data);
       toast.success("Speciality Updated Successfully");
     }else {
       await createSpeciality(data);
       toast.success("Speciality Updated Successfully");
     }
     reset();
-    router.push("/dashboard/speciality")
+    router.push("/dashboard/specialities")
   }
 async function handleCreateMany(){
   setIsLoading(true);
@@ -99,9 +100,9 @@ async function handleCreateMany(){
             </Button>
             <Button asChild variant={"outline"}>Create Many specialities</Button>
             <SubmitButton 
-            title={edititingId ? "Update Speciality" : "Create Speciality"} 
-            isLoading={isLoading} 
-            loadingTitle={edititingId ? "Updating Please Wait..." : "Saving please wait..."} />
+             title={edititingId ? "Update Speciality" : "Create Speciality"} 
+             isLoading={isLoading} 
+             LoadingTitle={edititingId ? "Updating Please Wait..." : "Saving please wait..."} />
               </div>
             </form>
         </div>

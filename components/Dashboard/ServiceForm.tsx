@@ -1,6 +1,5 @@
 "use client"
 import { useForm } from "react-hook-form"
-
 import TextInput from "@/components/FormInputs/TextInput";
 import SubmitButton from "@/components/FormInputs/SubmitButton";
 import { useState } from "react";
@@ -12,7 +11,7 @@ import generateSlug from "@/utils/generateSlug";
 import { createManyServices, createService } from "@/actions/services";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Service } from "@prisma/client";
+
 
 export type ServiceProps = {
   title: string;
@@ -42,7 +41,7 @@ export default function ServiceForm({
   });
   const router = useRouter();
   async function onSubmit(data: ServiceProps) {
-    setIsLoading(true)
+    setIsLoading(true);
     const slug = generateSlug(data.title);
     data.imageUrl = imageUrl;
     data.slug=slug;
@@ -74,9 +73,9 @@ async function handleCreateMany(){
            <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight">
               {title}
             </h1>
-            {/* <Button onClick={handleCreateMany} className="">
+             {/* <Button onClick={handleCreateMany} className="">
               {isLoading ? "Creating...." : "Create Many"}
-            </Button> */}
+            </Button>  */}
             <Button type="button" asChild variant={"outline"}>
               <Link href="/dashboard/services">
               <X className="w-4 h-4"/>

@@ -1,5 +1,8 @@
-import { SelectInput } from "@/components/FormInputs/SelectInput";
+
 import { Button } from "@/components/ui/button";
+import RadioInput from "@components/FormInputs/RadioInput";
+import SelectInput from "@components/FormInputs/SelectInput";
+import TextInput from "@components/FormInputs/TextInput";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -82,25 +85,25 @@ export default function UpdatedAppointmentForm({
                 </div>
                 <div className="py-2">
                 <TextInput
-                    label="Add Meeting Link"
-                    register={register}
-                    name="meetingLink"
-                    placeholder="https://meet.google.com/nvg-vvvd-uyj"
-                    />
+                        label="Add Meeting Link"
+                        register={register}
+                        name="meetingLink"
+                        placeholder="https://meet.google.com/nvg-vvvd-uyj"
+                         errors={error}                   
+                          />
                 </div>
                 <div className="py-2">
                 <div className="grid grid-cols-2 gap-6">
                     <SelectInput
-                    className="col-span-1"
-                    label="Meeting Provider"
-                    name="meetingProvider"
-                    register={register}
-                    options={meetingProviders}
-                    />
+                            className="col-span-1"
+                            label="Meeting Provider"
+                            name="meetingProvider"
+                            register={register}
+                            options={meetingProviders} errors={error}                    />
                     <RadioInput
                     title="Approve the Appointment"
                     name="status"
-                    errors={errors}
+                    errors={error}
                     register={register}
                     radioOptions={statusOptions}
                     className="col-span-1"

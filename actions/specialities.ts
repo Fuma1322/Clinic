@@ -1,33 +1,32 @@
 "use server"
 
 import { prismaClient } from "@/lib/db";
-import { ServiceProps } from "@/types/types";
-import { ok } from "assert";
+import { SpecialityProps } from "@components/Dashboard/PriceUpdateForm";
 import { revalidatePath } from "next/cache";
 
 
-export async function createService(data:ServiceProps) {
+export async function createSpeciality(data: SpecialityProps) {
     try {
-        const existingService = await prismaClient.service.findUnique({
+        const existingSpeciality = await prismaClient.service.findUnique({
             where: {
                 slug: data.slug
             },
         });
 
-        if (existingService) {
+        if (existingSpeciality) {
             return {
                 data: null,
                 status: 409,
-                error: "Service already exists"
+                error: "Speciality already exists"
             };
         }
-        const newService = await prismaClient.service.create({
+        const newSpeciality = await prismaClient.speciality.create({
             data,
         });
-        revalidatePath("/dashboard/services")
-        console.log(newService);
+        revalidatePath("/dashboard/specialities")
+        console.log(newSpeciality);
         return {
-            data: newService,
+            data: newSpeciality,
             status: 201,
             error: null,
         };
@@ -41,15 +40,15 @@ export async function createService(data:ServiceProps) {
     }
 }
 
-export async function getServices() {
+export async function getSpecialities() {
     try {
-        const services = await prismaClient.service.findMany({
+        const specialities = await prismaClient.speciality.findMany({
            orderBy:{
                 createdAt: "desc"
            },
         });
         return {
-            data: services,
+            data: specialities,
             status: 200,
             error:null,
         };
@@ -62,68 +61,55 @@ export async function getServices() {
         };
     }
 }
-export async function deleteService( id : string) {
+export async function createManySpecialities() {
+   
     try {
-        await prismaClient.service.delete({
+        const services = [
+            {
+                title: "Primary Care",
+                slug: "primary-care",
+    
+            },
+            {
+                title: "Dermatology",
+                slug: "dermatolog",
+    
+            },
+            {
+                title: "Dental",
+                slug: "dental",
+            },
+            ,
+        ];
+        for (const speciality of specialities) {
+            try {
+                await createSpeciality(speciality);
+            } catch (error) {
+                console.log(`Error creating service "${speciality.title}":`, error);
+            }
+        }
+    } catch (error) {
+        console.log(error)
+        return {
+            data: null,
+            status: 500,
+            error,
+        };
+    }
+}
+export async function deleteSpeciality( id : string) {
+    try {
+        await prismaClient.speciality.delete({
            where:{
                 id,
            },
         });
-        revalidatePath("/dashboard/services")
+        revalidatePath("/dashboard/specialities")
         return {
             ok: true,
             status: 200,
             error:null,
         };
-    } catch (error) {
-        console.log(error)
-        return {
-            data: null,
-            status: 500,
-            error,
-        };
-    }
-}
-export async function createManyServices() {
-   
-    try {
-        const services = [
-            {
-                title: "TeleHealth",
-                slug: "telehealth",
-                imageUrl: "",
-    
-            },
-            {
-                title: "UTI Consult",
-                slug: "uti-consult",
-                imageUrl: "",
-    
-            },
-            {
-                title: "Video Prescription Refill",
-                slug: "video-prescription-refill",
-                imageUrl: "",
-            },
-            {
-                title: "In Person Doctor Visit",
-                slug: "in-person-doctor-visit",
-                imageUrl: "",
-    
-            },
-            {
-                title: "Mental Health Consult",
-                slug: "mental-health-consult",
-                imageUrl: "",
-            },
-        ];
-        for (const service of services) {
-            try {
-                await createService(service);
-            } catch (error) {
-                console.log(`Error creating service "${service.title}":`, error);
-            }
-        }
     } catch (error) {
         console.log(error)
         return {
