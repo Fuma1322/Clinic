@@ -38,7 +38,7 @@ export default async function page() {
           </div>
         </div>
 
-        //DISPLAY PANEL
+        {/* DISPLAY PANEL */}
     <div className="flex h-1/2 items-center justify-center">
         <div className=' py-4 px-6 text-center border-white shadow-md rounded-md flex flex-col items-center gap-1 text-sm'>
             <LayoutGrid/>
