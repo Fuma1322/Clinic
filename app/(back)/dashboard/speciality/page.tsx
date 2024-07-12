@@ -26,8 +26,8 @@ export default async function page() {
         </div>
        <div className="px-3">
        <ScrollArea className="h-96 w-full">
-            {specialities.map((speciality) => (
-                <SpecialityCard  speciality={speciality} />
+            {specialities.map((speciality,i) => (
+                <SpecialityCard key={i} speciality={speciality} />
             ))}
         </ScrollArea>
        </div>
@@ -39,7 +39,7 @@ export default async function page() {
           </div>
         </div>
 
-        {/* DISPLAY PANEL */}
+        {/* //DISPLAY PANEL */}
     <div className="flex h-1/2 items-center justify-center">
         <div className=' py-4 px-6 text-center border-white shadow-md rounded-md flex flex-col items-center gap-1 text-sm'>
             <Anvil/>
