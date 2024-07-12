@@ -7,7 +7,7 @@ import { revalidatePath } from "next/cache";
 
 export async function createSpeciality(data: SpecialityProps) {
     try {
-        const existingSpeciality = await prismaClient.service.findUnique({
+        const existingSpeciality = await prismaClient.speciality.findUnique({
             where: {
                 slug: data.slug
             },
