@@ -1,7 +1,6 @@
 import { getSpecialities } from '@/actions/specialities'
 import NewButton from '@/components/Dashboard/Doctor/NewButton'
 import PannelHeader from '@/components/Dashboard/Doctor/PannelHeader'
-import ServiceCard from '@/components/Dashboard/ServiceCard'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import SpecialityCard from '@components/Dashboard/SpecialityCard'
 import { Anvil } from 'lucide-react'
@@ -27,7 +26,7 @@ export default async function page() {
        <div className="px-3">
        <ScrollArea className="h-96 w-full">
             {specialities.map((speciality,i) => (
-                <SpecialityCard key={i} speciality={speciality} />
+                <SpecialityCard key={speciality.title} speciality={speciality} />
             ))}
         </ScrollArea>
        </div>

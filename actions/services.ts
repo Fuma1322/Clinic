@@ -163,3 +163,68 @@ export async function updateDoctorProfileWithService(
     }
 }
 }
+export async function getServiceBySlug(slug: string) {
+    try {
+     if(slug){
+        const service = await prismaClient.service.findUnique({
+            where:{
+                 slug,
+            }
+         });
+         return {
+             data: service,
+             status: 200,
+             error:null,
+         };
+     }   
+    } catch (error) {
+        console.log(error)
+        return {
+            data: null,
+            status: 500,
+            error,
+    };
+    }
+}
+export async function updateService(id:string, data:ServiceProps) {
+    try {
+        const existingService = await prismaClient.service.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if (!existingService) {
+            return {
+                data: null,
+                status: 409,
+                error: "Service with that does not exist"
+            };
+        }
+
+        // const formattedTitle = { set: [data.title] };
+
+        const updatedService = await prismaClient.service.update({
+           where:{
+            id
+           }, 
+           data
+        });
+        revalidatePath("/dashboard/services")
+        console.log(updatedService);
+
+        return {
+            data: updatedService,
+            status: 201,
+            error: null,
+        };
+    } catch (error) {
+        console.error(error);
+
+        return {
+            data: null,
+            status: 501,
+            error: "Service not created",
+        };
+    }
+}

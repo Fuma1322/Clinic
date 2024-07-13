@@ -1,9 +1,11 @@
-import { deleteService } from '@/actions/services'
-import { Link, Pencil, Trash } from 'lucide-react'
+"use client"
+
+import { deleteSpeciality } from '@/actions/specialities'
+import { Pencil, Trash } from 'lucide-react'
+import Link from 'next/link'
 import React from 'react'
 import toast from 'react-hot-toast'
-import Image from 'next/image'
-import { Service } from "@prisma/client"
+import { Symptom } from "@prisma/client"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -16,37 +18,28 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 
-export default function ServiceCard({
-  service
+export default function SymptomCard({
+    symptom
 }:{
-  service:Service
+    symptom: Symptom
 }) {
   async function handleDelete( id : string) {
-    await deleteService (id)
-    toast.success("Service Deleted Successfully")
+    await deleteSpeciality (id)
+    toast.success("Symptom Deleted Successfully")
   }
   return (
     <div 
     className='border mb-2 border-gray-100 shadow-sm text-xs bg-slate-900 
-    py-3 px-4 justify-between w-full rounded-md dark:text-slate-900 flex items-center gap-2'
-  >
-    <div className="flex items-center gap-3">
-    <Image 
-    src={service.imageUrl} 
-    alt={service.title} 
-    width={512} 
-    height={512} 
-    className='w-14 h-auto'
-    />
-    <h2>{service.title}</h2>
-    </div>
+    py-3 px-4 w-full rounded-md dark:text-slate-900 flex items-center gap-4 justify-between'
+    >
+    <h2>{symptom.title}</h2>
     <div className="flex">
-        <Link className='text-blue-600' href={`/dashboard/services/update/${service.slug}`}>
+        <Link className='text-blue-600' href={`/dashboard/symptoms/update/${symptom.slug}`}>
             <Pencil className='w-4 h-4'/>
         </Link>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-          <button onClick={()=>handleDelete(service.id)} className='text-red-600'>
+          <button onClick={()=>handleDelete(symptom.id)} className='text-red-600'>
             <Trash className='w- h-4'/>
         </button>
           </AlertDialogTrigger>
@@ -55,12 +48,12 @@ export default function ServiceCard({
               <AlertDialogTitle className='text-red-600'>Are you absolutely sure?</AlertDialogTitle>
               <AlertDialogDescription>
                 This action cannot be undone. This will permanently delete your
-                service
+                symptom
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={()=> handleDelete(service.id)}>Delete</AlertDialogAction>
+              <AlertDialogAction onClick={()=> handleDelete(symptom.id)}>Delete</AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>

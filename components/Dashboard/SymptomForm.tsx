@@ -10,58 +10,59 @@ import { X } from "lucide-react";
 import generateSlug from "@/utils/generateSlug";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { createSpeciality, updateSpeciality } from "@/actions/specialities";
-import { Speciality } from "@prisma/client";
+import { Symptom } from "@prisma/client";
+import { createManySymptoms, createSymptom, updateSymptomById } from "@/actions/symptom";
 
-
-export type SpecialityProps = {
+export type SymptomProps = {
   title: string;
   slug:string;
 }
-export default function SpecialityForm({
+export default function SymptomForm({
   title,
   initialData,
 }:{
   title: string;
-  initialData?: Speciality;
+  initialData?: Symptom;
 }) {
   const edititingId = initialData?.id || "";
   const [isLoading, setIsLoading]=useState(false);
+  // const initialImageUrl = initialData?.imageUrl || "";
+  // const [imageUrl, setImageUrl] = useState(initialImageUrl);
   const {
     register,
     handleSubmit,
     reset,
     formState:{errors},
-  } = useForm<SpecialityProps>({
+  } = useForm<SymptomProps>({
     defaultValues: {
-     title: initialData?.title,
+      title: initialData?.title,
     },
   });
   const router = useRouter();
-  async function onSubmit(data: SpecialityProps) {
+  async function onSubmit(data: SymptomProps) {
     setIsLoading(true)
     const slug = generateSlug(data.title);
     data.slug=slug;
     console.log(data);
     if (edititingId){
-      await updateSpeciality(edititingId, data);
-      toast.success("Speciality Updated Successfully");
+      await updateSymptomById(edititingId, data);
+      toast.success("Symptom Updated Successfully");
     }else {
-      await createSpeciality(edititingId, data);
-      toast.success("Speciality Updated Successfully");
+      await createSymptom(data);
+      toast.success("Symptom Updated Successfully");
     }
     reset();
-    router.push("/dashboard/specialities")
+    router.push("/dashboard/symptoms")
   }
-// async function handleCreateMany(){
-//   setIsLoading(true);
-//   try {
-//     await createManySpecialities()
-//     setIsLoading(false)
-//   } catch (error) {
-//     console.log(error);
-//   }
-// } 
+async function handleCreateMany(){
+  setIsLoading(true);
+  try {
+    await createManySymptoms()
+    setIsLoading(false)
+  } catch (error) {
+    console.log(error);
+  }
+} 
    
     return (
         <div className=" w-full max-w-xl shadow-sm rounded-md m-3 border border-gray-200 mx-auto">
@@ -70,11 +71,11 @@ export default function SpecialityForm({
            <h1 className="scroll-m-20 text-2xl font-extrabold tracking-tight">
               {title}
             </h1>
-            {/* <Button onClick={handleCreateMany} className="">
+            {/* <Button type="button" onClick={handleCreateMany} className="">
               {isLoading ? "Creating...." : "Create Many"}
             </Button> */}
             <Button type="button" asChild variant={"outline"}>
-              <Link href="/dashboard/specialities">
+              <Link href="/dashboard/symptoms">
               <X className="w-4 h-4"/>
               </Link>
             </Button>
@@ -83,25 +84,24 @@ export default function SpecialityForm({
           <form onSubmit={handleSubmit(onSubmit)} className="py-4 px-4 mx-auto">
               <div className="grid gap-4 grid-cols-2">
               <TextInput 
-              label="Speciality Title" 
+              label="Symptom Title" 
               register={register} 
               name="title" 
               errors={errors} 
-              placeholder="Enter Speciality title"
+              placeholder="Enter Symptoms title"
               />
               </div>
         
               <div className="mt-8 flex justify-between gap-4 items-center">
               <Button asChild variant={"outline"}>
-              <Link href="/dashboard/specialities">
+              <Link href="/dashboard/symptoms">
               Cancel
               </Link>
             </Button>
-            <Button asChild variant={"outline"}>Create Many specialities</Button>
             <SubmitButton 
-             title={edititingId ? "Update Speciality" : "Create Speciality"} 
-             isLoading={isLoading} 
-             LoadingTitle={edititingId ? "Updating Please Wait..." : "Create please wait..."} />
+            title={edititingId ? "Update Symptoms" : "Create Symptoms"} 
+            isLoading={isLoading} 
+            LoadingTitle={edititingId ? "Updating Please Wait..." : "Creating please wait..."} />
               </div>
             </form>
         </div>
